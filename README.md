@@ -15,7 +15,35 @@
 - **원가 부풀림 감지** — 표시 원가가 의심스러우면 그대로 경고
 - **쉐어링크 발급** — 바로 구매할 수 있는 링크까지
 
-## 설치 (Claude Code)
+## 무료 Open API
+
+키 없이 바로 호출됩니다. Claude 스킬은 이 API의 클라이언트 중 하나일 뿐이에요 —
+봇, 사이트, 에이전트, 자동화 어디든 자유롭게 붙이세요.
+
+```bash
+# 지금 진짜 할인 중인 딜 (판정 포함)
+curl -s "https://api.catcheap.com/v1/toss/deals?limit=3"
+
+# 추적 중인 상품 검색
+curl -s "https://api.catcheap.com/v1/toss/products/search?keyword=생수"
+
+# 구매 링크(쉐어링크) 발급
+curl -s -X POST "https://api.catcheap.com/v1/toss/links" \
+  -H "Content-Type: application/json" -d '{"tacaItemId": 123456}'
+```
+
+응답의 `realDiscountPct`(평소 대비 실질 할인율), `isAllTimeLow`(관측 역대가),
+`inflatedOriginal`(원가 부풀림 의심)이 핵심 필드입니다. 전체 명세는
+[SKILL.md](SKILL.md)의 엔드포인트 표와 같습니다.
+
+**이용 조건** (쉐어링크 운영정책이 적용됩니다):
+
+- 발급 링크는 제휴 링크이며, 링크를 노출하는 화면에 반드시 다음 문구를 함께
+  표시해야 합니다: *"[광고] 토스쇼핑 쉐어링크 활동으로, 링크 구매 시 수수료를 지급받습니다."*
+- 수신 동의 없는 메시지 발송, 타인 게시물 댓글 살포, 클릭 보상 제공에는 쓸 수 없습니다.
+- 링크 발급에는 일일 상한이 있고, 과도한 호출은 차단될 수 있습니다.
+
+## Claude 스킬로 쓰기
 
 ```bash
 git clone https://github.com/catcheap/toss-shopping-deals.git ~/.claude/skills/toss-shopping-deals
@@ -25,6 +53,10 @@ git clone https://github.com/catcheap/toss-shopping-deals.git ~/.claude/skills/t
 
 > 토스 특가 뭐 있어?
 > 지금 진짜 싸게 파는 거 알려줘
+
+매일 쓰는 법: Claude Code의 스케줄 기능과 묶으면 개인용 가격 감시가 됩니다.
+
+> 매일 아침 8시에 토스 진짜 딜 3개만 브리핑해줘
 
 ## 작동 구조 (투명하게)
 
