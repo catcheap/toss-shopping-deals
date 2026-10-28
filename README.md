@@ -24,8 +24,8 @@
 # 지금 진짜 할인 중인 딜 (판정 포함)
 curl -s "https://api.catcheap.com/v1/toss/deals?limit=3"
 
-# 추적 중인 상품 검색
-curl -s "https://api.catcheap.com/v1/toss/products/search?keyword=생수"
+# 추적 중인 상품 검색 (한글 키워드는 --data-urlencode 로 안전하게)
+curl -s --get "https://api.catcheap.com/v1/toss/products/search" --data-urlencode "keyword=생수"
 
 # 구매 링크(쉐어링크) 발급
 curl -s -X POST "https://api.catcheap.com/v1/toss/links" \
